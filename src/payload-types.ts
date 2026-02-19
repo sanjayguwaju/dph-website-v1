@@ -70,14 +70,15 @@ export interface Config {
     users: User;
     media: Media;
     pages: Page;
-    news: News;
-    officials: Official;
-    services: Service;
-    'hero-slides': HeroSlide;
+    articles: Article;
+    authors: Author;
+    categories: Category;
     'photo-gallery': PhotoGallery;
     'video-gallery': VideoGallery;
-    'vendor-applications': VendorApplication;
+    comments: Comment;
     notices: Notice;
+    tags: Tag;
+    newsletters: Newsletter;
     forms: Form;
     'form-submissions': FormSubmission;
     'payload-kv': PayloadKv;
@@ -90,14 +91,15 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     pages: PagesSelect<false> | PagesSelect<true>;
-    news: NewsSelect<false> | NewsSelect<true>;
-    officials: OfficialsSelect<false> | OfficialsSelect<true>;
-    services: ServicesSelect<false> | ServicesSelect<true>;
-    'hero-slides': HeroSlidesSelect<false> | HeroSlidesSelect<true>;
+    articles: ArticlesSelect<false> | ArticlesSelect<true>;
+    authors: AuthorsSelect<false> | AuthorsSelect<true>;
+    categories: CategoriesSelect<false> | CategoriesSelect<true>;
     'photo-gallery': PhotoGallerySelect<false> | PhotoGallerySelect<true>;
     'video-gallery': VideoGallerySelect<false> | VideoGallerySelect<true>;
-    'vendor-applications': VendorApplicationsSelect<false> | VendorApplicationsSelect<true>;
+    comments: CommentsSelect<false> | CommentsSelect<true>;
     notices: NoticesSelect<false> | NoticesSelect<true>;
+    tags: TagsSelect<false> | TagsSelect<true>;
+    newsletters: NewslettersSelect<false> | NewslettersSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
@@ -110,11 +112,11 @@ export interface Config {
   };
   fallbackLocale: ('false' | 'none' | 'null') | false | null | ('en' | 'ne') | ('en' | 'ne')[];
   globals: {
-    header: Header;
+    navigation: Navigation;
     footer: Footer;
   };
   globalsSelect: {
-    header: HeaderSelect<false> | HeaderSelect<true>;
+    navigation: NavigationSelect<false> | NavigationSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
   };
   locale: 'en' | 'ne';
@@ -216,9 +218,9 @@ export interface Page {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "news".
+ * via the `definition` "articles".
  */
-export interface News {
+export interface Article {
   id: string;
   title: string;
   slug: string;
@@ -249,9 +251,9 @@ export interface News {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "officials".
+ * via the `definition` "authors".
  */
-export interface Official {
+export interface Author {
   id: string;
   name: string;
   designation: string;
@@ -270,9 +272,9 @@ export interface Official {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "services".
+ * via the `definition` "categories".
  */
-export interface Service {
+export interface Category {
   id: string;
   name: string;
   slug: string;
@@ -296,21 +298,6 @@ export interface Service {
     [k: string]: unknown;
   } | null;
   image?: (string | null) | Media;
-  order?: number | null;
-  isActive?: boolean | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "hero-slides".
- */
-export interface HeroSlide {
-  id: string;
-  image: string | Media;
-  title: string;
-  caption: string;
-  link?: string | null;
   order?: number | null;
   isActive?: boolean | null;
   updatedAt: string;
@@ -347,27 +334,14 @@ export interface VideoGallery {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "vendor-applications".
+ * via the `definition` "comments".
  */
-export interface VendorApplication {
+export interface Comment {
   id: string;
-  trackingCode?: string | null;
-  status?: ('pending' | 'approved' | 'rejected') | null;
   name: string;
-  contactPerson: string;
-  address: string;
-  correspondenceAddress: string;
-  phone: string;
-  mobile: string;
   email: string;
-  serviceCategory: 'goods' | 'construction' | 'consultancy' | 'other';
-  serviceDescription: string;
-  documents: {
-    firmRegistration: string | Media;
-    vatPan: string | Media;
-    taxClearance: string | Media;
-    license?: (string | null) | Media;
-  };
+  content: string;
+  article: string | Article;
   updatedAt: string;
   createdAt: string;
 }
@@ -386,6 +360,26 @@ export interface Notice {
   popupStartDate?: string | null;
   popupEndDate?: string | null;
   status?: ('draft' | 'published') | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tags".
+ */
+export interface Tag {
+  id: string;
+  name: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "newsletters".
+ */
+export interface Newsletter {
+  id: string;
+  email: string;
   updatedAt: string;
   createdAt: string;
 }
@@ -618,20 +612,16 @@ export interface PayloadLockedDocument {
         value: string | Page;
       } | null)
     | ({
-        relationTo: 'news';
-        value: string | News;
+        relationTo: 'articles';
+        value: string | Article;
       } | null)
     | ({
-        relationTo: 'officials';
-        value: string | Official;
+        relationTo: 'authors';
+        value: string | Author;
       } | null)
     | ({
-        relationTo: 'services';
-        value: string | Service;
-      } | null)
-    | ({
-        relationTo: 'hero-slides';
-        value: string | HeroSlide;
+        relationTo: 'categories';
+        value: string | Category;
       } | null)
     | ({
         relationTo: 'photo-gallery';
@@ -642,12 +632,20 @@ export interface PayloadLockedDocument {
         value: string | VideoGallery;
       } | null)
     | ({
-        relationTo: 'vendor-applications';
-        value: string | VendorApplication;
+        relationTo: 'comments';
+        value: string | Comment;
       } | null)
     | ({
         relationTo: 'notices';
         value: string | Notice;
+      } | null)
+    | ({
+        relationTo: 'tags';
+        value: string | Tag;
+      } | null)
+    | ({
+        relationTo: 'newsletters';
+        value: string | Newsletter;
       } | null)
     | ({
         relationTo: 'forms';
@@ -754,9 +752,9 @@ export interface PagesSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "news_select".
+ * via the `definition` "articles_select".
  */
-export interface NewsSelect<T extends boolean = true> {
+export interface ArticlesSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
   category?: T;
@@ -772,9 +770,9 @@ export interface NewsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "officials_select".
+ * via the `definition` "authors_select".
  */
-export interface OfficialsSelect<T extends boolean = true> {
+export interface AuthorsSelect<T extends boolean = true> {
   name?: T;
   designation?: T;
   department?: T;
@@ -789,28 +787,14 @@ export interface OfficialsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "services_select".
+ * via the `definition` "categories_select".
  */
-export interface ServicesSelect<T extends boolean = true> {
+export interface CategoriesSelect<T extends boolean = true> {
   name?: T;
   slug?: T;
   icon?: T;
   description?: T;
   image?: T;
-  order?: T;
-  isActive?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "hero-slides_select".
- */
-export interface HeroSlidesSelect<T extends boolean = true> {
-  image?: T;
-  title?: T;
-  caption?: T;
-  link?: T;
   order?: T;
   isActive?: T;
   updatedAt?: T;
@@ -842,28 +826,13 @@ export interface VideoGallerySelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "vendor-applications_select".
+ * via the `definition` "comments_select".
  */
-export interface VendorApplicationsSelect<T extends boolean = true> {
-  trackingCode?: T;
-  status?: T;
+export interface CommentsSelect<T extends boolean = true> {
   name?: T;
-  contactPerson?: T;
-  address?: T;
-  correspondenceAddress?: T;
-  phone?: T;
-  mobile?: T;
   email?: T;
-  serviceCategory?: T;
-  serviceDescription?: T;
-  documents?:
-    | T
-    | {
-        firmRegistration?: T;
-        vatPan?: T;
-        taxClearance?: T;
-        license?: T;
-      };
+  content?: T;
+  article?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -881,6 +850,24 @@ export interface NoticesSelect<T extends boolean = true> {
   popupStartDate?: T;
   popupEndDate?: T;
   status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tags_select".
+ */
+export interface TagsSelect<T extends boolean = true> {
+  name?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "newsletters_select".
+ */
+export interface NewslettersSelect<T extends boolean = true> {
+  email?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1076,9 +1063,9 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "header".
+ * via the `definition` "navigation".
  */
-export interface Header {
+export interface Navigation {
   id: string;
   logo: string | Media;
   navItems?:
@@ -1135,9 +1122,9 @@ export interface Footer {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "header_select".
+ * via the `definition` "navigation_select".
  */
-export interface HeaderSelect<T extends boolean = true> {
+export interface NavigationSelect<T extends boolean = true> {
   logo?: T;
   navItems?:
     | T

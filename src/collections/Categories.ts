@@ -1,10 +1,10 @@
-import type { CollectionConfig } from 'payload'
+import type { CollectionConfig } from "payload";
 
-export const Services: CollectionConfig = {
-  slug: 'services',
+export const Categories: CollectionConfig = {
+  slug: "categories",
   admin: {
-    useAsTitle: 'name',
-    defaultColumns: ['name', 'icon', 'order'],
+    useAsTitle: "name",
+    defaultColumns: ["name", "icon", "order"],
   },
   access: {
     read: () => true,
@@ -14,14 +14,14 @@ export const Services: CollectionConfig = {
   },
   fields: [
     {
-      name: 'name',
-      type: 'text',
+      name: "name",
+      type: "text",
       required: true,
       localized: true,
     },
     {
-      name: 'slug',
-      type: 'text',
+      name: "slug",
+      type: "text",
       required: true,
       unique: true,
       hooks: {
@@ -30,41 +30,41 @@ export const Services: CollectionConfig = {
             if (!value && data?.name) {
               return data.name
                 .toLowerCase()
-                .replace(/ /g, '-')
-                .replace(/[^\w-]+/g, '')
+                .replace(/ /g, "-")
+                .replace(/[^\w-]+/g, "");
             }
-            return value
+            return value;
           },
         ],
       },
     },
     {
-      name: 'icon',
-      type: 'text',
+      name: "icon",
+      type: "text",
       required: true,
       admin: {
         description: 'Lucide icon name (e.g., "stethoscope", "heart-pulse", "baby")',
       },
     },
     {
-      name: 'description',
-      type: 'richText',
+      name: "description",
+      type: "richText",
       localized: true,
     },
     {
-      name: 'image',
-      type: 'upload',
-      relationTo: 'media',
+      name: "image",
+      type: "upload",
+      relationTo: "media",
     },
     {
-      name: 'order',
-      type: 'number',
+      name: "order",
+      type: "number",
       defaultValue: 0,
     },
     {
-      name: 'isActive',
-      type: 'checkbox',
+      name: "isActive",
+      type: "checkbox",
       defaultValue: true,
     },
   ],
-}
+};
